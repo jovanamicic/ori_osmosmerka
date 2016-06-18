@@ -1,0 +1,1 @@
+http://www.enchantedlearning.com/wordlist/ link sa kog smo preuzele dataset
