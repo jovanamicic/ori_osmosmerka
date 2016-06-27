@@ -64,6 +64,8 @@ public class Word {
 	
 	public void addFiled(Field field)
 	{
+		if ( letters == null)
+			letters = new ArrayList<Field>();
 		letters.add(field); 
 	}
 
