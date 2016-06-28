@@ -25,7 +25,8 @@ public class WordSearchServices {
 	HttpServletRequest request;
 	@Context
 	ServletContext ctx;
-	
+
+	private static ArrayList<String> wordsToFind;
 	public char fs = File.separatorChar;
 	
 	@POST
@@ -47,11 +48,25 @@ public class WordSearchServices {
 		
 		WordSearchGenerator generator = new WordSearchGenerator(5000, allWords);
 		
-		generator.generate(); //ubaci reci
-		generator.randomLetters(); //popuni grid do kraja random slovima
+		generator.generate(); 		//ubaci reci
+		generator.randomLetters(); 	//popuni grid do kraja random slovima
+		
+		wordsToFind = new ArrayList<String>();
+		wordsToFind.addAll(generator.getCurrentWordList());
 		
 		return generator.getGrid();
 		
 	}
 
+	@POST
+	@Path("/getWords")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<String> getWords() throws ClassNotFoundException, IOException {
+		
+		ArrayList<String> allWords = new ArrayList<>();
+		
+		allWords.addAll(wordsToFind);
+		System.out.println(allWords.size());
+		return allWords;
+	}
 }
