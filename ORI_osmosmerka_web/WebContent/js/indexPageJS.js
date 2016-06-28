@@ -3,5 +3,6 @@ function chooseCategory(e){
 }
 
 function redirect(){
+	
 	window.location.href = "template.html";
 }
