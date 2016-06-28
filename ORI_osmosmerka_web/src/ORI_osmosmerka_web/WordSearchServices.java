@@ -1,5 +1,6 @@
 package ORI_osmosmerka_web;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -25,15 +26,18 @@ public class WordSearchServices {
 	@Context
 	ServletContext ctx;
 	
+	private static ArrayList<String> wordsToFind;
+	
+	public char fs = File.separatorChar;
 	
 	@POST
 	@Path("/getGameTable")
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Field> getGameTable(String category) throws ClassNotFoundException, IOException {
-		
-		ArrayList<String> availableWords = DatasetParser.parseDataSet("beach.csv");
-		
+		category = category.replace("\"", "");
+		String path = ctx.getRealPath("")+ fs + "dataset" + fs + category.toLowerCase()+".csv";
+		ArrayList<String> availableWords = DatasetParser.parseDataSet(path);
 		ArrayList<Word> allWords = new ArrayList<Word>();
 		
 		for (String s : availableWords)
@@ -45,11 +49,25 @@ public class WordSearchServices {
 		
 		WordSearchGenerator generator = new WordSearchGenerator(5000, allWords);
 		
-		generator.generate(); //ubaci reci
-		generator.randomLetters(); //popuni grid do kraja random slovima
+		generator.generate(); 		//ubaci reci
+		generator.randomLetters(); 	//popuni grid do kraja random slovima
+		
+		wordsToFind = new ArrayList<String>();
+		wordsToFind.addAll(generator.getCurrentWordList());
 		
 		return generator.getGrid();
 		
 	}
 
+	@POST
+	@Path("/getWords")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<String> getWords() throws ClassNotFoundException, IOException {
+		
+		ArrayList<String> allWords = new ArrayList<>();
+		
+		allWords.addAll(wordsToFind);
+		System.out.println(allWords.size());
+		return allWords;
+	}
 }

@@ -1,22 +1,28 @@
 var startClick = 0; //not clicked
 var endClick = 0; //not clicked
 
+
+function getURLParameter(url, name) {
+    return (RegExp(name + '=' + '(.+?)(&|$)').exec(url)||[,null])[1];
+}
+
+
 function random()
 {
+
 //	for (var i = 0; i < 12*12; i++) 
 //	{
 //		var divID = "#" + i;
 //		$(divID).html(i.toString().charAt(0));
 //	}
 //	
+	var category = getURLParameter(window.location, 'category');
 	
 	$.ajax({
 		type : 'POST',
 		url : "../ORI_osmosmerka_web/rest/game/getGameTable",
 		contentType : 'application/json',
-		data : JSON.stringify({
-			"kategorija" : "kategorija"
-		}),
+		data : JSON.stringify(category),
 		dataType : "json", 				// data type of response
 		success : function(data) {
 			
@@ -24,6 +30,37 @@ function random()
 			$.each(list, function(index, field){
 				var divID = "#" + index;
 				$(divID).html(field.letter);
+				
+			});
+			wordsToFind();
+		},
+		error:  function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR in all Objects Index js: " + errorThrown);
+		}
+	});
+}
+
+
+function wordsToFind() {
+	
+	var divForWords = document.getElementById("allWords");
+	
+	$.ajax({
+		type : 'POST',
+		url : "../ORI_osmosmerka_web/rest/game/getWords",
+		contentType : 'application/json',
+		dataType : "json", 				// data type of response
+		success : function(data) {
+			
+			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+			$.each(list, function(index, word){
+				
+				var innerDiv = document.createElement('div');
+				innerDiv.className = word;
+
+				divForWords.appendChild(innerDiv);
+				innerDiv.innerHTML = word;
+				
 			});
 		},
 		error:  function(XMLHttpRequest, textStatus, errorThrown) {
