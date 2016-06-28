@@ -106,7 +106,7 @@ $(document).on('mousedown','.letters',function(){
 			success : function(data) {
 				if (data == "ok") //ako je pogodio rec obelezi je kao pronadjenu
 				{
-					$("." + selectedLetters).html("<strike>" + selectedLetters + "</strike>");
+					$("." + selectedLetters).html("<strike  style='color:#555555'>" + selectedLetters + "</strike>");
 					
 					$(".selected_word").addClass("founded_word");
 					$(".selected_word").removeClass("selected_word");
