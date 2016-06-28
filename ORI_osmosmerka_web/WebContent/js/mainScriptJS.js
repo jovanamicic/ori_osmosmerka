@@ -1,6 +1,12 @@
 var startClick = 0; //not clicked
 var endClick = 0; //not clicked
 
+
+function getURLParameter(url, name) {
+    return (RegExp(name + '=' + '(.+?)(&|$)').exec(url)||[,null])[1];
+}
+
+
 function random()
 {
 //	for (var i = 0; i < 12*12; i++) 
@@ -9,14 +15,13 @@ function random()
 //		$(divID).html(i.toString().charAt(0));
 //	}
 //	
+	var category = getURLParameter(window.location, 'category');
 	
 	$.ajax({
 		type : 'POST',
 		url : "../ORI_osmosmerka_web/rest/game/getGameTable",
 		contentType : 'application/json',
-		data : JSON.stringify({
-			"kategorija" : "kategorija"
-		}),
+		data : JSON.stringify(category),
 		dataType : "json", 				// data type of response
 		success : function(data) {
 			
@@ -30,6 +35,7 @@ function random()
 			alert("AJAX ERROR in all Objects Index js: " + errorThrown);
 		}
 	});
+	
 }
 
 $(document).on('mousedown','.letters',function(){

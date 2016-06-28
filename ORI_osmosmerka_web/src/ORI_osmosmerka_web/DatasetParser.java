@@ -7,9 +7,8 @@ import java.util.Scanner;
 
 public class DatasetParser {
 	
-	public static ArrayList<String> parseDataSet(String dataSet){
+	public static ArrayList<String> parseDataSet(String path){
 		ArrayList<String> words = new ArrayList<String>();
-		String path = ".\\WebContent\\dataset\\" + dataSet;
 		Scanner scanner;
 		try {
 			scanner = new Scanner(new File(path));
@@ -22,15 +21,15 @@ public class DatasetParser {
 			scanner.close();
 		         
 		} catch (FileNotFoundException e) {
-			System.out.println("File doesn't exist.");
+			System.err.println(e);
 		}
         
 		return words;
 	}
 
-	public static void main(String[] args) {
-		String dataSet = "beach.csv";
-		ArrayList<String> words = parseDataSet(dataSet);
-	}
+//	public static void main(String[] args) {
+//		String dataSet = "beach.csv";
+//		ArrayList<String> words = parseDataSet(dataSet);
+//	}
 
 }

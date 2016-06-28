@@ -1,5 +1,6 @@
 package ORI_osmosmerka_web;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -25,15 +26,16 @@ public class WordSearchServices {
 	@Context
 	ServletContext ctx;
 	
+	public char fs = File.separatorChar;
 	
 	@POST
 	@Path("/getGameTable")
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Field> getGameTable(String category) throws ClassNotFoundException, IOException {
-		
-		ArrayList<String> availableWords = DatasetParser.parseDataSet("beach.csv");
-		
+		category = category.replace("\"", "");
+		String path = ctx.getRealPath("")+ fs + "dataset" + fs + category.toLowerCase()+".csv";
+		ArrayList<String> availableWords = DatasetParser.parseDataSet(path);
 		ArrayList<Word> allWords = new ArrayList<Word>();
 		
 		for (String s : availableWords)
