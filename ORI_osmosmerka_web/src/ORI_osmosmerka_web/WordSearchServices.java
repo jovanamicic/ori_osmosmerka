@@ -25,9 +25,8 @@ public class WordSearchServices {
 	HttpServletRequest request;
 	@Context
 	ServletContext ctx;
-	
+
 	private static ArrayList<String> wordsToFind;
-	
 	public char fs = File.separatorChar;
 	
 	@POST

@@ -67,6 +67,7 @@ function wordsToFind() {
 			alert("AJAX ERROR in all Objects Index js: " + errorThrown);
 		}
 	});
+	
 }
 
 $(document).on('mousedown','.letters',function(){
