@@ -52,9 +52,9 @@ function wordsToFind() {
 				
 				var innerDiv = document.createElement('div');
 				innerDiv.className = word;
-
+				
 				divForWords.appendChild(innerDiv);
-				innerDiv.innerHTML = "<strike>"+word+"</strike>";
+				innerDiv.innerHTML = word;
 				
 			});
 		},
@@ -106,6 +106,8 @@ $(document).on('mousedown','.letters',function(){
 			success : function(data) {
 				if (data == "ok") //ako je pogodio rec obelezi je kao pronadjenu
 				{
+					$("." + selectedLetters).html("<strike>" + selectedLetters + "</strike>");
+					
 					$(".selected_word").addClass("founded_word");
 					$(".selected_word").removeClass("selected_word");
 				}
