@@ -11,5 +11,5 @@ $(document).on('click', '#chooseCategory li', function(){
 });
 
 function redirect(){
-	window.location.href = "template.html?category="+category;
+	window.location.href = "template.html?category=" + category;
 }

@@ -9,6 +9,7 @@ function getURLParameter(url, name) {
 
 function random()
 {
+
 //	for (var i = 0; i < 12*12; i++) 
 //	{
 //		var divID = "#" + i;
@@ -29,6 +30,37 @@ function random()
 			$.each(list, function(index, field){
 				var divID = "#" + index;
 				$(divID).html(field.letter);
+				
+			});
+			wordsToFind();
+		},
+		error:  function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("AJAX ERROR in all Objects Index js: " + errorThrown);
+		}
+	});
+}
+
+
+function wordsToFind() {
+	
+	var divForWords = document.getElementById("allWords");
+	
+	$.ajax({
+		type : 'POST',
+		url : "../ORI_osmosmerka_web/rest/game/getWords",
+		contentType : 'application/json',
+		dataType : "json", 				// data type of response
+		success : function(data) {
+			
+			var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+			$.each(list, function(index, word){
+				
+				var innerDiv = document.createElement('div');
+				innerDiv.className = word;
+
+				divForWords.appendChild(innerDiv);
+				innerDiv.innerHTML = word;
+				
 			});
 		},
 		error:  function(XMLHttpRequest, textStatus, errorThrown) {
