@@ -11,8 +11,8 @@ public class SearchWord {
 	
 	public static void main (String[] args) throws ClassNotFoundException, IOException
 	{
-		//ArrayList<String> availableWords = DatasetParser.parseDataSet("beach.csv");
-		ArrayList<String> availableWords = new ArrayList<>();
+		ArrayList<String> availableWords = DatasetParser.parseDataSet("beach.csv");
+		//ArrayList<String> availableWords = new ArrayList<>();
 		availableWords.add("mina");
 		availableWords.add("medic");
 		availableWords.add("jovana");
@@ -35,11 +35,9 @@ public class SearchWord {
 		WordSearchGenerator generator = new WordSearchGenerator(5000, allWords);
 		
 		generator.generate();
+		
+		generator.randomLetters();
 		generator.display();
-		
-		//generator.randomizeAndSort();
-		
-		//generator.print();
 		
 		
 	}

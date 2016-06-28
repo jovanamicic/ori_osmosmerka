@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Random;
 
 public class WordSearchGenerator {
 
@@ -139,31 +140,23 @@ public class WordSearchGenerator {
 		{
 			if (this.currentWordList.size() == 0)
 			{
-				//TODO stanja: east, south, west, north, north-east, north-west, south-west, south-east
+				//TODO stanja
 
 				String direction = "";
 				
 				double random = Math.random();
 				
-				if (random >= 0 && random < 1.25)
-					direction = "east";
-				else if (random >= 1.25 && random < 2.5)
-					direction = "south";
-				else if (random >= 2.5 && random < 3.75)
+				if (random >= 0 && random < 2.5)
 					direction = "west";
-				else if (random >= 3.75 && random < 5)
+				else if (random >= 2.5 && random < 5)
+					direction = "south";
+				else if (random >= 5 && random < 7.5)
 					direction = "north";
-				else if (random >= 5 && random < 6.25)
-					direction = "north-east";
-				else if (random >= 6.25 && random < 7.5)
-					direction = "north-west";
-				else if (random >= 7.5 && random < 8.75)
-					direction = "south-west";
 				else
-					direction = "south-east";
+					direction = "east";
 					
-					
-				int row = 5, col = 5;
+				direction = "east";
+				int row = 3, col = 3;
 				
 				if (this.checkValue(col, row, direction, word) != 0) 
 				{
@@ -225,18 +218,20 @@ public class WordSearchGenerator {
 			
 			setCell(col, row, letter);
 			
+			//TODO smerovi
+			
 			if (direction.contains("south") ) //ide na dole
 				row++;
-			else if (direction.contains("north")) //ide na gore
+			if (direction.contains("north")) //ide na gore
 				row--;
-			else if (direction.contains("east")) //ide na desno
+			if (direction.contains("east")) //ide na desno
 				col++;
-			else if (direction.contains("west")) //ide na levo
+			if (direction.contains("west")) //ide na levo
 				col--;
 			
 			word.addFiled(grid.get(index));
-			
 		}
+		
 	}
 
 	public ArrayList<String> suggestCoordinates(Word word) {
@@ -254,77 +249,41 @@ public class WordSearchGenerator {
 				{
 					if ( (getCell(cell, row)).getLetter() == letter )
 					{
-						// coord = col, row, direction, col + row, value
-						
 						//TODO: ostala stanja
 						
 						// proba south, na dole
 						if (row - i >= 0) //da ne izadjemo van mreze
 						{
 							if (row - i + word.getWord().length() <= ROWS) { //da li moze da stane vertikalno
-								String coords = cell + "," + (row - i) + ",south,"
-										 + "0";
+								String coords = cell + "," + (row - i) + ",south,0";
 								coordList.add(coords);
 							}
 						}
 						
 						// proba north, na gore
-						if (row + i <= ROWS) //da ne izadjemo van mreze
+						if (row + i < ROWS) //da ne izadjemo van mreze
 						{
-							if (row + i - word.getWord().length() >= 0) { //da li moze da stane vertikalno
-								String coords = cell + "," + (row + i) + ",north,"
-										 + "0";
+							if (row + i - word.getWord().length() > 0) { //da li moze da stane vertikalno
+								String coords = cell + "," + (row + i) + ",north,0";
 								coordList.add(coords);
 							}
 						}
-						
+//						
 						// proba east, na desno
-						if (cell - i >= 0)
-							if (cell - i + word.getWord().length() <= COLUMS) {
-								String coords = (cell - i) + "," + (row) + ",east,"
-										 + "0";
+						if (cell - i >= 0) //da nije izasao na levu stranu
+							if (cell - i + word.getWord().length() <= COLUMS) { //da nije izasao na desnu
+								String coords = (cell - i) + "," + (row) + ",east,0";
 								coordList.add(coords);
 							}
 						
 						// proba west, na levo
-						if (cell + i >= COLUMS)
-							if (cell + i - word.getWord().length() >= 0) {
-								String coords = (cell + i) + "," + (row) + ",west,"
-										 + "0";
-								coordList.add(coords);
+						if (cell + i < COLUMS) {
+							if (cell + i - word.getWord().length() > 0) {
+								String coords = (cell + i) + "," + (row) + ",west,0";
+								coordList.add(coords); 
 							}
+						}
 						
-						// proba south-west, gore levo
-						if (cell + i >= COLUMS && row - i >= 0)
-							if (cell + i - word.getWord().length() >= 0 && row - i + word.getWord().length() <= ROWS) {
-								String coords = (cell + i) + "," + (row-i) + ",south-west,"
-										 + "0";
-								coordList.add(coords);
-							}
-						
-						// proba south-east, gore desno
-						if (cell - i >= 0 && row - i >= 0)
-							if (cell - i + word.getWord().length() <= COLUMS && row - i + word.getWord().length() <= ROWS) {
-								String coords = (cell - i) + "," + (row-i) + ",south-east,"
-										 + "0";
-								coordList.add(coords);
-							}
-						
-						// proba north-west, dole, levo
-						if (row + i <= ROWS && cell + i >= COLUMS)
-							if (row + i - word.getWord().length() >= 0 && cell + i - word.getWord().length() >= 0) {
-								String coords = (cell+i) + "," + (row+i) + ",north-west,"
-										 + "0";
-								coordList.add(coords);
-							}
-						
-						// proba north-east, dole, levo
-						if (row + i <= ROWS && cell - i >= 0)
-							if (row + i - word.getWord().length() >= 0 && cell - i + word.getWord().length() <= COLUMS) {
-								String coords = (cell-i) + "," + (row+i) + ",north-east,"
-										 + "0";
-								coordList.add(coords);
-							}
 					}
 				}
 				
@@ -335,7 +294,6 @@ public class WordSearchGenerator {
 		newCoordList.addAll(coordList);
 		
 		newCoordList = this.sortCoordList(newCoordList, word);
-		
 		
 		return newCoordList;
 	}
@@ -361,7 +319,7 @@ public class WordSearchGenerator {
 			
 		}
 		
-		//Collections.shuffle(newCoordList);
+		Collections.shuffle(newCoordList);
 		
 		//sortiraj po value
 		Collections.sort(newCoordList, new Comparator<String>() {
@@ -372,6 +330,13 @@ public class WordSearchGenerator {
 				return val2.compareTo(val1);
 			}
 		});
+		
+		for (String s : newCoordList)
+			if (s.contains("north-east"))
+			{
+				newCoordList.set(0, s);
+				break;
+			}
 		
 
 		return newCoordList;
@@ -401,7 +366,9 @@ public class WordSearchGenerator {
 			if (activeCell.getLetter() == letter)
 				value++;
 			
-			//	TODO: stanja
+			// TODO: stanja
+			//proverava da li postoji vec upisana neka rec
+			//ako postoji ne moze da je upise
 			
 			if (direction.equals("north")) //ka gore
 			{
@@ -436,7 +403,7 @@ public class WordSearchGenerator {
 				row--;
 			}
 			
-			if (direction.equals("south"))
+			else if (direction.equals("south"))
 			{
 				if ((activeCell.getLetter() != (letter)) ) //proveri da li se ukrstaju
 				{
@@ -468,7 +435,7 @@ public class WordSearchGenerator {
 				
 				row++;
 			}
-			if (direction.equals("east"))
+			else if (direction.equals("east"))
 			{
 				if (activeCell.getLetter() != (letter)) //proveri da li se ukrstaju
 				{
@@ -502,7 +469,7 @@ public class WordSearchGenerator {
 			}
 			
 			
-			if (direction.equals("west"))
+			else if (direction.equals("west"))
 			{
 				if (activeCell.getLetter() != (letter)) //proveri da li se ukrstaju
 				{
@@ -534,44 +501,6 @@ public class WordSearchGenerator {
 				
 				col--;
 			}
-			
-			if (direction.equals("south-west"))
-			{
-				if (activeCell.getLetter() != (letter)) //proveri da li se ukrstaju
-				{
-					if (row > 0 && !checkIfFieldClear(col, row-1) &&
-						(col < (COLUMS-1) && !checkIfFieldClear(col+1, row))) //proveri polje iznad desno
-					{
-						return 0;
-					}
-					if (row < (ROWS-1) && !checkIfFieldClear(col, row+1) &&
-						((col > 0) && !checkIfFieldClear(col-1, row))) //proveri polje ispod levo
-					{
-						return 0;
-					}
-				}
-				
-				if (count == 1) //ako je prvo slovo, proveri da li ima neka rec desno
-				{
-					if (col < (COLUMS -1) && !checkIfFieldClear(col+1, row) && (row > 0 && !checkIfFieldClear(col, row-1)))
-					{
-						return 0;
-					}
-				}
-				
-				if (count == word.getWord().length()) //ako je poslednje slovo, proveri da li ima neka rec levo
-				{
-					if (col > 0 && !checkIfFieldClear(col-1, row) && (row < (ROWS - 1) && !checkIfFieldClear(col, row+1)))
-					{
-						return 0;
-					}
-				}
-				
-				col--;
-				row++;
-			}
-			
-			
 			
 			count++;
 		}
@@ -620,20 +549,6 @@ public class WordSearchGenerator {
 		//boolean exist = false;
 		for (Word w : copy.availableWords) {
 			copy.fitAndAdd(w);
-			System.out.println();
-			this.display();
-//			for (String tmp : copy.getCurrentWordList()) {
-//				if (tmp.equals(w.getWord())) 
-//				{
-//					exist = true;
-//					break;
-//				}
-//			}
-//			if (!exist)
-//			{
-//				copy.fitAndAdd(w);
-//				exist = false;
-//			}
 		}
 		
 		
@@ -647,7 +562,7 @@ public class WordSearchGenerator {
 			this.grid.addAll(copy.getGrid());
 		}
 		
-		display();
+		//display();
 	}
 
 	
@@ -662,6 +577,21 @@ public class WordSearchGenerator {
 				System.out.print(grid.get(index).getLetter());
 			}
 			System.out.println();
+		}
+		
+	}
+	
+	public void randomLetters()
+	{
+		for (int i = 0; i < grid.size(); i++)
+		{
+			if (grid.get(i).getLetter() == '-') 
+			{
+				Random r = new Random();
+				char c = (char) (r.nextInt(26) + 'a');
+				grid.get(i).setLetter(c);
+			}
+			
 		}
 	}
 
