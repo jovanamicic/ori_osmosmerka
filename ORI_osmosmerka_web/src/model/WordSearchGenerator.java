@@ -76,8 +76,6 @@ public class WordSearchGenerator {
 		return ROWS;
 	}
 	
-	
-
 	public ArrayList<Word> getWords() {
 		return words;
 	}
@@ -252,9 +250,9 @@ public class WordSearchGenerator {
 						//TODO: ostala stanja
 						
 						// proba south, na dole
-						if (row - i >= 0) //da ne izadjemo van mreze
+						if (row - i > 0) //da ne izadjemo van mreze
 						{
-							if (row - i + word.getWord().length() <= ROWS) { //da li moze da stane vertikalno
+							if (row - i + word.getWord().length() < ROWS) { //da li moze da stane vertikalno
 								String coords = cell + "," + (row - i) + ",south,0";
 								coordList.add(coords);
 							}
@@ -270,8 +268,8 @@ public class WordSearchGenerator {
 						}
 //						
 						// proba east, na desno
-						if (cell - i >= 0) //da nije izasao na levu stranu
-							if (cell - i + word.getWord().length() <= COLUMS) { //da nije izasao na desnu
+						if (cell - i > 0) //da nije izasao na levu stranu
+							if (cell - i + word.getWord().length() < COLUMS) { //da nije izasao na desnu
 								String coords = (cell - i) + "," + (row) + ",east,0";
 								coordList.add(coords);
 							}
@@ -546,12 +544,13 @@ public class WordSearchGenerator {
 		copy.clearGrid();
 		copy.randomizeAndSort();
 		
-		//boolean exist = false;
 		for (Word w : copy.availableWords) {
-			copy.fitAndAdd(w);
+			if (copy.currentWordList.size() > 12){
+				break;
+			}
+			else
+				copy.fitAndAdd(w);
 		}
-		
-		
 
 		if (copy.currentWordList.size() > this.currentWordList.size()) {
 			this.currentWordList.clear();
@@ -562,7 +561,6 @@ public class WordSearchGenerator {
 			this.grid.addAll(copy.getGrid());
 		}
 		
-		//display();
 	}
 
 	
