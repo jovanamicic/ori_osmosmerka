@@ -1,5 +1,7 @@
 var startClick = 0; //not clicked
 var endClick = 0; //not clicked
+var foundWordsCount = 0;
+var wordsToFindCount = 0;
 
 
 function getURLParameter(url, name) {
@@ -55,7 +57,7 @@ function wordsToFind() {
 				
 				divForWords.appendChild(innerDiv);
 				innerDiv.innerHTML = word;
-				
+				wordsToFindCount++;
 			});
 		},
 		error:  function(XMLHttpRequest, textStatus, errorThrown) {
@@ -93,8 +95,6 @@ $(document).on('mousedown','.letters',function(){
 		startClick = 0;
 		endClick = 1;
 		
-		//TODO pozvati funkciju koja ce proveriti tacnost 
-		
 		var selectedLetters = $('#showSelectedLetters').val();
 		
 		$.ajax({
@@ -110,6 +110,10 @@ $(document).on('mousedown','.letters',function(){
 					
 					$(".selected_word").addClass("founded_word");
 					$(".selected_word").removeClass("selected_word");
+					foundWordsCount++;
+					if  (wordsToFindCount == foundWordsCount){
+						toastr.success("Congrats! You win!");  //TODO mozemo dodati neki lepsi ispis...
+					}
 				}
 				else
 				{ //ako nije ponisti svima boju
