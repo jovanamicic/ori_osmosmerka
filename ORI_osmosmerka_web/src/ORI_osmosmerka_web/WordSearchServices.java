@@ -49,7 +49,7 @@ public class WordSearchServices {
 		WordSearchGenerator generator = new WordSearchGenerator(5000, allWords);
 		
 		generator.generate(); 		//ubaci reci
-		generator.randomLetters(); 	//popuni grid do kraja random slovima
+		//generator.randomLetters(); 	//popuni grid do kraja random slovima
 		
 		wordsToFind = new ArrayList<String>();
 		wordsToFind.addAll(generator.getCurrentWordList());
@@ -62,11 +62,21 @@ public class WordSearchServices {
 	@Path("/getWords")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<String> getWords() throws ClassNotFoundException, IOException {
+		return wordsToFind;
+	}
+	
+	@POST
+	@Path("/checkAnswer")
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces(MediaType.TEXT_PLAIN)
+	public String checkAnswer(String wordToCheck) throws ClassNotFoundException, IOException {
+		wordToCheck = wordToCheck.replace("\"", "");
 		
-		ArrayList<String> allWords = new ArrayList<>();
+		for (String s : wordsToFind)
+			if (s.equalsIgnoreCase(wordToCheck))
+				return "ok";
 		
-		allWords.addAll(wordsToFind);
-		System.out.println(allWords.size());
-		return allWords;
+		return "no";
+		
 	}
 }

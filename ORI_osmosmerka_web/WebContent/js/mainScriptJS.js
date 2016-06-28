@@ -10,12 +10,6 @@ function getURLParameter(url, name) {
 function random()
 {
 
-//	for (var i = 0; i < 12*12; i++) 
-//	{
-//		var divID = "#" + i;
-//		$(divID).html(i.toString().charAt(0));
-//	}
-//	
 	var category = getURLParameter(window.location, 'category');
 	
 	$.ajax({
@@ -30,6 +24,7 @@ function random()
 			$.each(list, function(index, field){
 				var divID = "#" + index;
 				$(divID).html(field.letter);
+				$(divID).addClass("plain_word");
 				
 			});
 			wordsToFind();
@@ -59,12 +54,12 @@ function wordsToFind() {
 				innerDiv.className = word;
 
 				divForWords.appendChild(innerDiv);
-				innerDiv.innerHTML = word;
+				innerDiv.innerHTML = "<strike>"+word+"</strike>";
 				
 			});
 		},
 		error:  function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR in all Objects Index js: " + errorThrown);
+			alert("AJAX ERROR in get game table js: " + errorThrown);
 		}
 	});
 	
@@ -74,22 +69,61 @@ $(document).on('mousedown','.letters',function(){
 	if (startClick == 0){
 		var selectedLetter = $(this).text();
 		$('#showSelectedLetters').val(selectedLetter);
-		$(this).css("background", "#555555");
+		//$(this).css("background", "#555555");
+		
+		//TODO treba da se doda klasa
+		var is_founded = false;
+		
+		if ($(this).hasClass('founded_word')) {
+			$(this).addClass("founded");
+        }
+		
+		$(this).removeClass("plain_word");
+		$(this).removeClass("founded_word");
+		
+		$(this).addClass("selected_word");
+		
+		
+		
+		
 		startClick = 1; // clicked
 		endClick = 0;
 	}
 	else if (startClick == 1 && endClick ==0){
 		startClick = 0;
 		endClick = 1;
+		
 		//TODO pozvati funkciju koja ce proveriti tacnost 
-		alert("check answer");
-		//ako je pogodio rec obelezi je kao pronadjenu
-		//ako nije ponisti svima boju
-		for (var i = 0; i < 12*12; i++) 
-		{
-			var divID = "#" + i;
-			$(divID).css("background", "#1abc9c");
-		}
+		
+		var selectedLetters = $('#showSelectedLetters').val();
+		
+		$.ajax({
+			type : 'POST',
+			url : "../ORI_osmosmerka_web/rest/game/checkAnswer",
+			contentType : 'application/json',
+			data : JSON.stringify(selectedLetters),
+			dataType : "text", 				// data type of response
+			success : function(data) {
+				if (data == "ok") //ako je pogodio rec obelezi je kao pronadjenu
+				{
+					$(".selected_word").addClass("founded_word");
+					$(".selected_word").removeClass("selected_word");
+				}
+				else
+				{ //ako nije ponisti svima boju
+					$(".selected_word").removeClass("selected_word");
+					$(".founded").addClass("founded_word");
+				}
+				
+			},
+			error:  function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX ERROR in all Objects Index js: " + errorThrown);
+			}
+		});
+		
+		
+		
+		
 	}
 	
 })
@@ -98,8 +132,19 @@ $(document).on('mouseover','.letters', function(){
 	if (startClick == 1 && endClick == 0){
 		var text = $('#showSelectedLetters').val();
 		var selectedLetter = $(this).text();
-		$(this).css("background", "#555555");
+		//$(this).css("background", "#555555");
 		$('#showSelectedLetters').val(text + selectedLetter);
+		
+		var is_founded = false;
+		
+		if ($(this).hasClass('founded_word')) {
+			$(this).addClass("founded");
+        }
+		
+		$(this).removeClass("plain_word");
+		$(this).removeClass("founded_word");
+		
+		$(this).addClass("selected_word");
 	}
 });
 

@@ -60,3 +60,19 @@ p {
 	width : 50%;
 	margin-left : 5em;
 }
+
+
+
+.selected_word {
+	background : #555555;
+	opacity: 0.5;
+}
+
+.founded_word {
+	background : #c6c8bd;
+	opacity: 0.8;
+}
+
+.plain_word {
+	background : #1abc9c;
+}
