@@ -59,7 +59,7 @@ function wordsToFind() {
 				innerDiv.className = word;
 
 				divForWords.appendChild(innerDiv);
-				innerDiv.innerHTML = word;
+				innerDiv.innerHTML = "<strike>"+word+"</strike>";
 				
 			});
 		},

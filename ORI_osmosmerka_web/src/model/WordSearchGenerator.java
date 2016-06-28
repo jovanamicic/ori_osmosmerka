@@ -76,8 +76,6 @@ public class WordSearchGenerator {
 		return ROWS;
 	}
 	
-	
-
 	public ArrayList<Word> getWords() {
 		return words;
 	}
@@ -546,12 +544,13 @@ public class WordSearchGenerator {
 		copy.clearGrid();
 		copy.randomizeAndSort();
 		
-		//boolean exist = false;
 		for (Word w : copy.availableWords) {
-			copy.fitAndAdd(w);
+			if (copy.currentWordList.size() > 12){
+				break;
+			}
+			else
+				copy.fitAndAdd(w);
 		}
-		
-		
 
 		if (copy.currentWordList.size() > this.currentWordList.size()) {
 			this.currentWordList.clear();
@@ -562,7 +561,6 @@ public class WordSearchGenerator {
 			this.grid.addAll(copy.getGrid());
 		}
 		
-		//display();
 	}
 
 	
