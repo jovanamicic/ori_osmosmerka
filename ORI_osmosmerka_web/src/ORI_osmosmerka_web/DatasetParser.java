@@ -1,4 +1,4 @@
-package services;
+package ORI_osmosmerka_web;
 
 import java.io.File;
 import java.io.FileNotFoundException;

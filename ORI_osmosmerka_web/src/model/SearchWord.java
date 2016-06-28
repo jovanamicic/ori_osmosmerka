@@ -3,7 +3,7 @@ package model;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import services.DatasetParser;
+import ORI_osmosmerka_web.DatasetParser;
 
 public class SearchWord {
 	
