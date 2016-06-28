@@ -36,7 +36,3 @@ function redirect(){
 	
 	window.location.href = "template.html";
 }
-
-$(document).on('click','#categories li', function(){
-	alert($(this).text());
-})
