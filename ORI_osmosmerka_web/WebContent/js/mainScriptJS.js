@@ -3,6 +3,18 @@ var endClick = 0; //not clicked
 var foundWordsCount = 0;
 var wordsToFindCount = 0;
 
+category = "";
+
+
+$(document).on('click', '#chooseCategory li', function(){
+	category = $(this).text();
+	$('#chooseCategoryBtn').html(category);
+});
+
+function redirect(){
+	window.location.href = "template.html?category=" + category;
+}
+
 
 function getURLParameter(url, name) {
     return (RegExp(name + '=' + '(.+?)(&|$)').exec(url)||[,null])[1];
@@ -121,7 +133,8 @@ $(document).on('mousedown','.letters',function(){
 						$("#stop").click();
 						var snd = new Audio("sound//gameOverSound.mp3");
 						snd.play();
-
+						setTimeout(function(){$('#playAgainModal').modal();}, 2000);
+						
 					}
 				}
 				else
@@ -130,6 +143,7 @@ $(document).on('mousedown','.letters',function(){
 					$(".founded").addClass("founded_word");
 					var snd = new Audio("sound//errorSound.mp3");
 					snd.play();
+					$('#showSelectedLetters').val("");
 				}
 				
 			},
@@ -150,7 +164,7 @@ $(document).on('mouseover','.letters', function(){
 		var text = $('#showSelectedLetters').val();
 		var selectedLetter = $(this).text();
 		//$(this).css("background", "#555555");
-		$('#showSelectedLetters').val(text + selectedLetter);
+		
 		
 		var is_founded = false;
 		
@@ -161,8 +175,26 @@ $(document).on('mouseover','.letters', function(){
 		$(this).removeClass("plain_word");
 		$(this).removeClass("founded_word");
 		
-		$(this).addClass("selected_word");
+		
+		if ($(this).hasClass("selected_word"))
+		{
+			$("#"+previousDivID).removeClass("selected_word");
+			$('#showSelectedLetters').val(text.substring(0, text.length-1));
+			if ($("#"+previousDivID).hasClass('founded')) {
+				$("#"+previousDivID).addClass("founded_word");
+			}
+		}
+		else
+		{
+			$('#showSelectedLetters').val(text + selectedLetter);
+			$(this).addClass("selected_word");
+		}
 	}
+});
+
+var previousDivID = "";
+$(document).on('mouseleave','.letters', function(){
+	previousDivID = $(this).attr('id');
 });
 
 

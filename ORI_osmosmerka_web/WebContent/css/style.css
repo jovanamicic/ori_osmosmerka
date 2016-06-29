@@ -4,6 +4,10 @@ body {
 	color: #f5f6f7;
 }
 
+h3 {
+	color: #1abc9c;
+}
+
 p {
 	font-size: 16px;
 }
@@ -92,4 +96,5 @@ p {
 .letters {
 	width: 7.5%;
 	margin : 2px; 
+	cursor: default;
 }
