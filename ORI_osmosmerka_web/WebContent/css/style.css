@@ -88,3 +88,8 @@ p {
     margin-bottom: 0%;
     height: 10%;
 }
+
+.letters {
+	width: 7.5%;
+	margin : 2px; 
+}
