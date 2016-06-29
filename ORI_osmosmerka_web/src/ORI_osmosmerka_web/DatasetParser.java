@@ -15,8 +15,8 @@ public class DatasetParser {
 
 			while (scanner.hasNext()) {
 				String word = scanner.next().trim();
-				if (word.length() > 1){
-					words.add(word.toLowerCase());
+				if (word.length() > 1 && word.length() < 13){
+					words.add(word.toUpperCase());
 				}
 			}
 			scanner.close();

@@ -153,13 +153,14 @@ public class WordSearchGenerator {
 					direction = "north";
 				else
 					direction = "east";
+				
+				direction = "east";
 					
-				int row = 3, col = 3;
+				int row = 5, col = 1;
 				
 				if (this.checkValue(col, row, direction, word) != 0) 
 				{
 					fit = true;
-					//TODO ZASTO OVDE NISMO POVECAVALI RED I KOLONU????
 					setWord(col, row, direction, word);
 				}
 				
@@ -587,7 +588,7 @@ public class WordSearchGenerator {
 			if (grid.get(i).getLetter() == '-') 
 			{
 				Random r = new Random();
-				char c = (char) (r.nextInt(26) + 'a');
+				char c = (char) (r.nextInt(26) + 'A');
 				grid.get(i).setLetter(c);
 			}
 			
