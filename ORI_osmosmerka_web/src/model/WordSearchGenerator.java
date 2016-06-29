@@ -550,8 +550,11 @@ public class WordSearchGenerator {
 			if (copy.currentWordList.size() > 12){
 				break;
 			}
-			else
-				copy.fitAndAdd(w);
+			else {
+				if (!copy.currentWordList.contains(w.getWord())) {
+					copy.fitAndAdd(w);
+				}
+			}
 		}
 
 		if (copy.currentWordList.size() > this.currentWordList.size()) {

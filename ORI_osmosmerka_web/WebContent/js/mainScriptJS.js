@@ -115,6 +115,7 @@ $(document).on('mousedown','.letters',function(){
 					if  (wordsToFindCount == foundWordsCount){
 						toastr.success("Congrats! You win!");  //TODO mozemo dodati neki lepsi ispis...
 						$("#stop").click();
+
 					}
 				}
 				else
@@ -182,7 +183,7 @@ function startTimer() {
 	timer();
 	}
 	function timer() {
-		t = setTimeout(add, 1000);
+	t = setTimeout(add, 1000);
 	}
 	timer();
 	
