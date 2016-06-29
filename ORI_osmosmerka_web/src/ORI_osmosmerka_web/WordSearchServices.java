@@ -49,7 +49,7 @@ public class WordSearchServices {
 		WordSearchGenerator generator = new WordSearchGenerator(5000, allWords);
 		
 		generator.generate(); 		//ubaci reci
-		generator.randomLetters(); 	//popuni grid do kraja random slovima
+		//generator.randomLetters(); 	//popuni grid do kraja random slovima
 		
 		wordsToFind = new ArrayList<String>();
 		for (String s : generator.getCurrentWordList())
