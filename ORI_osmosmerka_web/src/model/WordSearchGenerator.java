@@ -136,6 +136,7 @@ public class WordSearchGenerator {
 		
 		while (!fit && (count < this.maxLoops))
 		{
+			//slucaj kada ubacujemo prvu rec u tablu
 			if (this.currentWordList.size() == 0)
 			{
 				//TODO stanja
@@ -153,17 +154,17 @@ public class WordSearchGenerator {
 				else
 					direction = "east";
 					
-				direction = "east";
 				int row = 3, col = 3;
 				
 				if (this.checkValue(col, row, direction, word) != 0) 
 				{
-					
 					fit = true;
+					//TODO ZASTO OVDE NISMO POVECAVALI RED I KOLONU????
 					setWord(col, row, direction, word);
 				}
 				
 			}
+			//slucaj kada ubacujemo dodatne reci u tablu (ne prvu)
 			else 
 			{
 				String coord = "";
@@ -204,9 +205,7 @@ public class WordSearchGenerator {
 		col--;
 		row--;
 		
-		
 		word.setDirection(direction);
-		
 		
 		currentWordList.add(word.getWord());
 		
@@ -266,7 +265,7 @@ public class WordSearchGenerator {
 								coordList.add(coords);
 							}
 						}
-//						
+						
 						// proba east, na desno
 						if (cell - i > 0) //da nije izasao na levu stranu
 							if (cell - i + word.getWord().length() < COLUMS) { //da nije izasao na desnu
@@ -544,6 +543,8 @@ public class WordSearchGenerator {
 		copy.clearGrid();
 		copy.randomizeAndSort();
 		
+		//provera da li se u tabli nalazi 12 reci
+		//ako da, prekini dalju pretragu
 		for (Word w : copy.availableWords) {
 			if (copy.currentWordList.size() > 12){
 				break;

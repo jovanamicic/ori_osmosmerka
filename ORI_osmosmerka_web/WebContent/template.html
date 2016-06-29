@@ -20,7 +20,7 @@
 
 
 </head>
-<body onload="random()">
+<body onload="random(), startTimer()">
 
 	<!-- Navbar -->
 	<nav class="navbar navbar-default">
@@ -193,8 +193,11 @@
 		</div>
 
 		<form role="form">
-			<div class="form-group text-center col-md-offset-1 col-md-5">
+			<div class="form-group text-center col-md-offset-1 col-md-5" style="float: left; width: 40%; margin-left: 5%">
 				<input type="text" class="form-control" id="showSelectedLetters" disabled>
+			</div>
+			<div id="myTimer" class="form-group text-center col-md-offset-1 col-md-5 timerDiv" style="float: left">
+				<h1 class="timerH"><time>00:00:00</time></h1>
 			</div>
 		</form>
 
@@ -203,10 +206,12 @@
 	<!-- Second Container -->
 	<div class="container-fluid bg-2 text-center">
 		<h3 class="margin">How to play?</h3>
-		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-			eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-			ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-			aliquip ex ea commodo consequat.</p>
+		<p>We have the best collection of word search puzzles online, with new ones being added regularly.
+			They are fun to play, but also educational, in fact, many teachers make use of them.
+			Every puzzle is 100% free to play and you can even go old school and print them to enjoy offline later.
+			Plus, if you're feeling a little more adventurous, why not create your very own with our simple to use Word Search Maker, 
+			and then share them with your friends.
+			To get started playing, just select a game from below. Best of luck</p>
 		<a href="#" class="btn btn-default btn-lg"> <span
 			class="glyphicon glyphicon-search"></span> Search
 		</a>
