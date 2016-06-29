@@ -158,7 +158,8 @@ public class WordSearchGenerator {
 					
 				int row = 5, col = 1;
 				
-				if (this.checkValue(col, row, direction, word) != 0) 
+				//if (this.checkValue(col, row, direction, word) != 0) 
+				if (this.checkValue(col-1, row-1, direction, word) != 0) 
 				{
 					fit = true;
 					setWord(col, row, direction, word);
@@ -209,6 +210,9 @@ public class WordSearchGenerator {
 		word.setDirection(direction);
 		
 		currentWordList.add(word.getWord());
+		
+		System.out.println("REC: "  + word.getWord());
+		System.out.println("PRAVAC " + direction);
 		
 		for (char letter : word.getWord().toCharArray()) 
 		{
@@ -282,6 +286,16 @@ public class WordSearchGenerator {
 							}
 						}
 						
+						// proba north-east, gore desno
+						if (row + i < ROWS && cell - i >= 0) //da ne izadjemo van mreze
+						{
+							if (row + i - word.getWord().length() > 0 
+								&&	cell - i + word.getWord().length() <= COLUMS ) { //da li moze da stane vertikalno
+								String coords = (cell-i) + "," + (row+i) + ",north-east,0";
+								coordList.add(coords);
+							}
+						}
+						
 					}
 				}
 				
@@ -323,8 +337,10 @@ public class WordSearchGenerator {
 		Collections.sort(newCoordList, new Comparator<String>() {
 			@Override
 			public int compare(String s1, String s2) {
-				Integer val1 = new Integer(s1.split(",")[3]);
-				Integer val2 = new Integer(s2.split(",")[3]);
+				//Integer val1 = new Integer(s1.split(",")[3]);
+				//Integer val2 = new Integer(s2.split(",")[3]);
+				Integer val1 = (s1.split(",")[2]).length();
+				Integer val2 = (s2.split(",")[2]).length();
 				return val2.compareTo(val1);
 			}
 		});
@@ -498,6 +514,44 @@ public class WordSearchGenerator {
 				}
 				
 				col--;
+			}
+			
+			
+			else if (direction.equals("north-east")) //ka gore
+			{
+				if ((activeCell.getLetter() != (letter)) ) //proveri da li se ukrstaju
+				{
+					if (col < (COLUMS-1) && row > 0 && 
+						!checkIfFieldClear(col+1, row-1)) //proveri desno gore
+					{
+						return 0;
+					}
+					if ((col > 0) && row < (ROWS-1) && 
+						!checkIfFieldClear(col-1, row+1)) //proveri levo dole
+					{
+						return 0;
+					}
+				}
+				
+				if (count == 1) 
+				{
+					if (row < (ROWS-1) && col > 0 && 
+						!checkIfFieldClear(col-1, row+1))
+					{
+						return 0;
+					}
+				}
+				
+				if (count == word.getWord().length()) 
+				{
+					if (row > 0 && col < (COLUMS-1) && 
+						!checkIfFieldClear(col+1, row-1))
+					{
+						return 0;
+					}
+				}
+				
+				row--;
 			}
 			
 			count++;
