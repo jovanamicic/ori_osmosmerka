@@ -71,7 +71,9 @@ $(document).on('mousedown','.letters',function(){
 	if (startClick == 0){
 		var selectedLetter = $(this).text();
 		$('#showSelectedLetters').val(selectedLetter);
-
+		//$(this).css("background", "#555555");
+		
+		//TODO treba da se doda klasa
 		var is_founded = false;
 		
 		if ($(this).hasClass('founded_word')) {
@@ -104,15 +106,15 @@ $(document).on('mousedown','.letters',function(){
 			success : function(data) {
 				if (data == "ok") //ako je pogodio rec obelezi je kao pronadjenu
 				{
-					$("." + selectedLetters).html("<strike  style='color:#555555'>" + selectedLetters + "</strike>");
+					var selectedWord = selectedLetters.toLowerCase();
+					$("." + selectedWord).html("<strike  style='color:#555555'>" + selectedWord + "</strike>");
 					
 					$(".selected_word").addClass("founded_word");
 					$(".selected_word").removeClass("selected_word");
 					foundWordsCount++;
 					if  (wordsToFindCount == foundWordsCount){
 						toastr.success("Congrats! You win!");  //TODO mozemo dodati neki lepsi ispis...
-						
-						clearTimeout(t);
+						$("#stop").click();
 					}
 				}
 				else
@@ -155,6 +157,7 @@ $(document).on('mouseover','.letters', function(){
 });
 
 
+
 function startTimer() {
 	var h1 = document.getElementsByTagName('h1')[0],
 	start = document.getElementById('start'),
@@ -182,4 +185,8 @@ function startTimer() {
 		t = setTimeout(add, 1000);
 	}
 	timer();
+	
+	stop.onclick = function() {
+	    clearTimeout(t);
+	}
 }
