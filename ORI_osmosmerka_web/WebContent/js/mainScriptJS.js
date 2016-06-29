@@ -111,10 +111,16 @@ $(document).on('mousedown','.letters',function(){
 					
 					$(".selected_word").addClass("founded_word");
 					$(".selected_word").removeClass("selected_word");
+					
+					var snd = new Audio("sound//successSound.mp3");
+					snd.play();
+					
 					foundWordsCount++;
 					if  (wordsToFindCount == foundWordsCount){
 						toastr.success("Congrats! You win!");  //TODO mozemo dodati neki lepsi ispis...
 						$("#stop").click();
+						var snd = new Audio("sound//gameOverSound.mp3");
+						snd.play();
 
 					}
 				}
@@ -122,6 +128,8 @@ $(document).on('mousedown','.letters',function(){
 				{ //ako nije ponisti svima boju
 					$(".selected_word").removeClass("selected_word");
 					$(".founded").addClass("founded_word");
+					var snd = new Audio("sound//errorSound.mp3");
+					snd.play();
 				}
 				
 			},
