@@ -211,8 +211,10 @@ public class WordSearchGenerator {
 		
 		currentWordList.add(word.getWord());
 		
-		System.out.println("REC: "  + word.getWord());
-		System.out.println("PRAVAC " + direction);
+		if(direction.equals("north-east")){
+			System.out.println("REC: "  + word.getWord());
+			System.out.println("PRAVAC " + direction);
+		}
 		
 		for (char letter : word.getWord().toCharArray()) 
 		{
@@ -552,6 +554,7 @@ public class WordSearchGenerator {
 				}
 				
 				row--;
+				col++;
 			}
 			
 			count++;
