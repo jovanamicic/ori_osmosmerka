@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 
+import javax.sql.rowset.RowSetWarning;
+
 public class WordSearchGenerator {
 
 	public static final int COLUMS = 12;
@@ -211,8 +213,10 @@ public class WordSearchGenerator {
 		
 		currentWordList.add(word.getWord());
 		
-		System.out.println("REC: "  + word.getWord());
-		System.out.println("PRAVAC " + direction);
+		if(direction.contains("-")){
+			System.out.println("REC: "  + word.getWord());
+			System.out.println("PRAVAC " + direction);
+		}
 		
 		for (char letter : word.getWord().toCharArray()) 
 		{
@@ -292,6 +296,33 @@ public class WordSearchGenerator {
 							if (row + i - word.getWord().length() > 0 
 								&&	cell - i + word.getWord().length() <= COLUMS ) { //da li moze da stane vertikalno
 								String coords = (cell-i) + "," + (row+i) + ",north-east,0";
+								coordList.add(coords);
+							}
+						}
+						
+						// proba north-west, na gore levo
+						if (row + i < ROWS && cell + i < COLUMS) //da ne izadjemo van mreze
+						{
+							if (row + i - word.getWord().length() > 0 && cell + i - word.getWord().length() > 0) { //da li moze da stane vertikalno
+								String coords = (cell + i) + "," + (row + i) + ",north-west,0";
+								coordList.add(coords);
+							}
+						}
+						
+						//proba south-east, dole desno
+						if (row - i > 0 && cell - i > 0) //da ne izadjemo van mreze
+						{
+							if (row - i + word.getWord().length() < ROWS && cell - i + word.getWord().length() < COLUMS) { //da li moze da stane vertikalno
+								String coords = (cell - i) + "," + (row - i) + ",south-east,0";
+								coordList.add(coords);
+							}
+						}
+						
+						//proba south-west, dole levo
+						if (row - i > 0 && cell + i < COLUMS) //da ne izadjemo van mreze
+						{
+							if (row - i + word.getWord().length() < ROWS && cell + i - word.getWord().length() > 0) { //da li moze da stane vertikalno
+								String coords = (cell + i) + "," + (row - i) + ",south-west,0";
 								coordList.add(coords);
 							}
 						}
@@ -449,6 +480,7 @@ public class WordSearchGenerator {
 				
 				row++;
 			}
+			
 			else if (direction.equals("east"))
 			{
 				if (activeCell.getLetter() != (letter)) //proveri da li se ukrstaju
@@ -552,6 +584,109 @@ public class WordSearchGenerator {
 				}
 				
 				row--;
+				col++;
+			}
+			
+			else if (direction.equals("north-west")) // gore levo
+			{
+				if ((activeCell.getLetter() != (letter)) ) //proveri da li se ukrstaju
+				{
+					if (col < (COLUMS-1) && row > 0 && !checkIfFieldClear(col+1, row-1)) //proveri desno polje
+					{
+						return 0;
+					}
+					if ((col > 0) && row < ROWS-1  && !checkIfFieldClear(col-1, row+1)) //proveri levo polje
+					{
+						return 0;
+					}
+				}
+				
+				if (count == 1) //ako je prvo slovo, proveri da li ima neka rec ispod
+				{
+					if (row < (ROWS-1) && col < COLUMS -1 && !checkIfFieldClear(col+1, row+1))
+					{
+						return 0;
+					}
+				}
+				
+				if (count == word.getWord().length()) //ako je poslednje slovo, proveri da li ima neka rec iznad
+				{
+					if (row > 0 && col > 0 && !checkIfFieldClear(col-1, row-1))
+					{
+						return 0;
+					}
+				}
+				
+				row--;
+				col--;
+			}
+			
+			else if (direction.equals("south-east"))
+			{
+				if ((activeCell.getLetter() != (letter)) ) //proveri da li se ukrstaju
+				{
+					if (col < (COLUMS-1) && row > 0 && !checkIfFieldClear(col+1, row-1)) //proveri desno polje
+					{
+						return 0;
+					}
+					if ((col > 0) && row < ROWS -1 && !checkIfFieldClear(col-1, row+1)) //proveri levo polje
+					{
+						return 0;
+					}
+				}
+				
+				if (count == 1) //ako je prvo slovo, proveri da li ima neka rec iznad
+				{
+					if (row > 0 && col > 0&& !checkIfFieldClear(col-1, row-1))
+					{
+						return 0;
+					}
+				}
+				
+				if (count == word.getWord().length()) //ako je poslednje slovo, proveri da li ima neka rec ispod
+				{
+					if (row < (ROWS - 1) && col < COLUMS -1 && !checkIfFieldClear(col+1, row+1))
+					{
+						return 0;
+					}
+				}
+				
+				row++;
+				col++;
+			}
+			
+			else if (direction.equals("south-west"))
+			{
+				if ((activeCell.getLetter() != (letter)) ) //proveri da li se ukrstaju
+				{
+					if (col < (COLUMS-1) && row > 0 && !checkIfFieldClear(col+1, row-1)) //proveri desno polje
+					{
+						return 0;
+					}
+					if ((col > 0) && row < ROWS -1 && !checkIfFieldClear(col-1, row+1)) //proveri levo polje
+					{
+						return 0;
+					}
+				}
+				
+				if (count == 1) //ako je prvo slovo, proveri da li ima neka rec iznad
+				{
+					if (row > 0 && col < COLUMS -1 && !checkIfFieldClear(col+1, row-1))
+					{
+						return 0;
+					}
+				}
+				
+				if (count == word.getWord().length()) //ako je poslednje slovo, proveri da li ima neka rec ispod
+				{
+					if (row < (ROWS - 1) && col > 0 && !checkIfFieldClear(col-1, row+1))
+					{
+						return 0;
+					}
+				}
+				
+				row++;
+				col--;
 			}
 			
 			count++;
