@@ -3,6 +3,18 @@ var endClick = 0; //not clicked
 var foundWordsCount = 0;
 var wordsToFindCount = 0;
 
+category = "";
+
+
+$(document).on('click', '#chooseCategory li', function(){
+	category = $(this).text();
+	$('#chooseCategoryBtn').html(category);
+});
+
+function redirect(){
+	window.location.href = "template.html?category=" + category;
+}
+
 
 function getURLParameter(url, name) {
     return (RegExp(name + '=' + '(.+?)(&|$)').exec(url)||[,null])[1];
@@ -121,7 +133,8 @@ $(document).on('mousedown','.letters',function(){
 						$("#stop").click();
 						var snd = new Audio("sound//gameOverSound.mp3");
 						snd.play();
-
+						setTimeout(function(){$('#playAgainModal').modal();}, 2000);
+						
 					}
 				}
 				else
