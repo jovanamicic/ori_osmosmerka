@@ -82,10 +82,13 @@ function wordsToFind() {
 	
 }
 
+var firstLetterID = -1;
 $(document).on('mousedown','.letters',function(){
 	if (startClick == 0){
 		var selectedLetter = $(this).text();
 		$('#showSelectedLetters').val(selectedLetter);
+		
+		firstLetterID = $(this).attr("id");
 		
 		//TODO treba da se doda klasa
 		var is_founded = false;
@@ -98,9 +101,6 @@ $(document).on('mousedown','.letters',function(){
 		$(this).removeClass("founded_word");
 		
 		$(this).addClass("selected_word");
-		
-		
-		
 		
 		startClick = 1; // clicked
 		endClick = 0;
@@ -124,8 +124,9 @@ $(document).on('mousedown','.letters',function(){
 					$("." + selectedWord).html("<strike  style='color:#555555' class='strikeClass'>" + selectedWord + "</strike>");
 					
 					$(".selected_word").addClass("founded_word");
+					var divId = "#"+ firstLetterID;
 					$(".selected_word").removeClass("selected_word");
-				//TODO	$(".selected_word").first().removeClass("icon-effect");  ********KACAAAAAAAA treba skloniti klasu icon-effect sa prvog slova
+					$(divId).removeClass("icon-effect");
 					var snd = new Audio("sound//successSound.mp3");
 					snd.play();
 					
