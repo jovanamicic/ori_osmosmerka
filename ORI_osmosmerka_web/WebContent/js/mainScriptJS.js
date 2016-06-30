@@ -31,9 +31,14 @@ function getURLParameter(url, name) {
 
 function random()
 {
-
-	var category = getURLParameter(window.location, 'category');
-	var difficult = getURLParameter(window.location, 'difficult');
+	//defaultna kategorija
+	if (category == ""){
+		category = "Computer";
+	}
+	
+	if (difficult == ""){
+		difficult = "Hard";
+	}
 	
 	$.ajax({
 		type : 'POST',
@@ -96,9 +101,6 @@ $(document).on('mousedown','.letters',function(){
 	if (startClick == 0){
 		var selectedLetter = $(this).text();
 		$('#showSelectedLetters').val(selectedLetter);
-		
-		firstLetterID = $(this).attr("id");
-		
 		//TODO treba da se doda klasa
 		var is_founded = false;
 		
@@ -339,8 +341,10 @@ function startTimer() {
 	}
 }
 
+var hintUsed = 0;
 //***SHINE*** Klikom na hint zasija prvo slovo reci koja nije pronadjena
  $(document).on('click','#hintBtn',function(e){
+	 hintUsed++;
 	 var notFoundWords = [];
 	 var hintWord = "";
 	 e.preventDefault();
@@ -351,15 +355,27 @@ function startTimer() {
 		    }
 		});
 	 hintWord = notFoundWords[0];
+	 
+	 if (hintUsed == 5)
+		 toastr.info("You have no more easy hints!");
+	 
+	 var urlForHint = "";	 
+	 if (hintUsed <= 5){
+		urlForHint =  "../ORI_osmosmerka_web/rest/game/findLetterForHintEasy";
+	 }
+	 else
+		 urlForHint =  "../ORI_osmosmerka_web/rest/game/findLetterForHintHard";
+	 
 	 $.ajax({
 			type : 'POST',
-			url : "../ORI_osmosmerka_web/rest/game/findLetterForHint",
+			url : urlForHint ,
 			contentType : 'application/json',
 			data : JSON.stringify(hintWord),
 			dataType : "text", 				// data type of response
 			success : function(data) {
 				divId = "#"+data;
 				$(divId).addClass("icon-effect");
+				firstLetterID = data;
 			},
 			error:  function(XMLHttpRequest, textStatus, errorThrown) {
 				alert("AJAX ERROR in all Objects Index js: " + errorThrown);
