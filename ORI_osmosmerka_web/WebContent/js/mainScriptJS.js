@@ -306,7 +306,6 @@ $(document).on('mouseleave','.letters', function(){
 });
 
 
-
 function startTimer() {
 	var h1 = document.getElementsByTagName('h1')[0],
 	start = document.getElementById('start'),

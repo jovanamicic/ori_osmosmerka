@@ -98,3 +98,14 @@ p {
 	margin : 2px; 
 	cursor: default;
 }
+
+
+/**
+ * The "shine" element
+ */
+
+.icon-effect {
+	-webkit-box-shadow: 0px 0px 10px 5px #f2e1f2;
+	-moz-box-shadow: 0px 0px 10px 5px #f2e1f2;
+	box-shadow: 0px 0px 10px 5px #f2e1f2;
+}
