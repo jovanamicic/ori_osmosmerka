@@ -7,15 +7,20 @@ var id1 = 0;
 var id2 = 0;
 var direc = "";
 category = "";
-
+difficult = "";
 
 $(document).on('click', '#chooseCategory li', function(){
 	category = $(this).text();
 	$('#chooseCategoryBtn').html(category);
 });
 
+$(document).on('click', '#chooseDifficult li', function(){
+	difficult = $(this).text();
+	$('#chooseDifficultBtn').html(difficult);
+});
+
 function redirect(){
-	window.location.href = "template.html?category=" + category;
+	window.location.href = "template.html?category=" + category + "&difficult=" + difficult;
 }
 
 
@@ -28,12 +33,16 @@ function random()
 {
 
 	var category = getURLParameter(window.location, 'category');
+	var difficult = getURLParameter(window.location, 'difficult');
 	
 	$.ajax({
 		type : 'POST',
 		url : "../ORI_osmosmerka_web/rest/game/getGameTable",
 		contentType : 'application/json',
-		data : JSON.stringify(category),
+		data : JSON.stringify({
+			"category" : category,
+			"difficult" : difficult
+		}),
 		dataType : "json", 				// data type of response
 		success : function(data) {
 			
@@ -330,8 +339,10 @@ function startTimer() {
 	}
 }
 
+var hintUsed = 0;
 //***SHINE*** Klikom na hint zasija prvo slovo reci koja nije pronadjena
  $(document).on('click','#hintBtn',function(e){
+	 hintUsed++;
 	 var notFoundWords = [];
 	 var hintWord = "";
 	 e.preventDefault();
@@ -342,9 +353,20 @@ function startTimer() {
 		    }
 		});
 	 hintWord = notFoundWords[0];
+	 
+	 if (hintUsed == 5)
+		 toastr.info("You have no more easy hints!");
+	 
+	 var urlForHint = "";	 
+	 if (hintUsed <= 5){
+		urlForHint =  "../ORI_osmosmerka_web/rest/game/findLetterForHintEasy";
+	 }
+	 else
+		 urlForHint =  "../ORI_osmosmerka_web/rest/game/findLetterForHintHard";
+	 
 	 $.ajax({
 			type : 'POST',
-			url : "../ORI_osmosmerka_web/rest/game/findLetterForHint",
+			url : urlForHint ,
 			contentType : 'application/json',
 			data : JSON.stringify(hintWord),
 			dataType : "text", 				// data type of response

@@ -3,6 +3,7 @@ package ORI_osmosmerka_web;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -34,8 +35,16 @@ public class WordSearchServices {
 	@Path("/getGameTable")
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Field> getGameTable(String category) throws ClassNotFoundException, IOException {
-		category = category.replace("\"", "");
+	public ArrayList<Field> getGameTable(String input) throws ClassNotFoundException, IOException {
+		
+		input = input.replace("\"", "");
+		input = input.replace("}", "");
+		input = input.replace("{", "");
+		
+		String category = (input.split(",")[0]).split(":")[1];
+		String difficult = (input.split(",")[1]).split(":")[1];
+		
+		
 		String path = ctx.getRealPath("")+ fs + "dataset" + fs + category.toLowerCase()+".csv";
 		ArrayList<String> availableWords = DatasetParser.parseDataSet(path);
 		ArrayList<Word> allWords = new ArrayList<Word>();
@@ -49,7 +58,7 @@ public class WordSearchServices {
 		
 		WordSearchGenerator generator = new WordSearchGenerator(5000, allWords);
 		
-		generator.generate(); 		//ubaci reci
+		generator.generate(difficult); 		//ubaci reci
 		generator.randomLetters(); 	//popuni grid do kraja random slovima
 		
 		wordsToFind = new ArrayList<String>();
@@ -92,10 +101,10 @@ public class WordSearchServices {
 	}
 	
 	@POST
-	@Path("/findLetterForHint")
+	@Path("/findLetterForHintEasy")
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Produces(MediaType.TEXT_PLAIN)
-	public String findLetterForHint(String word) throws ClassNotFoundException, IOException {
+	public String findLetterForHintEasy(String word) throws ClassNotFoundException, IOException {
 		word = word.replace("\"", "");
 		
 		for (Word w : wordsInGrid)
@@ -109,4 +118,35 @@ public class WordSearchServices {
 		}
 		return "error";
 	}
+	
+	@POST
+	@Path("/findLetterForHintHard")
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces(MediaType.TEXT_PLAIN)
+	public String findLetterForHintHard(String word) throws ClassNotFoundException, IOException {
+		word = word.replace("\"", "");
+		
+		for (Word w : wordsInGrid)
+		{
+			if (w.getWord().equalsIgnoreCase(word)){
+				int n = getRandomNumberInRange(0, w.getLetters().size());
+				int row = w.getLetters().get(n).getX();
+				int col = w.getLetters().get(n).getY();
+				int index = row * 12 + col;
+				return index+"";
+			}
+		}
+		return "error";
+	}
+
+	public static int getRandomNumberInRange(int min, int max) {
+
+		if (min >= max) {
+			throw new IllegalArgumentException("max must be greater than min");
+		}
+
+		Random r = new Random();
+		return r.nextInt((max - min) + 1) + min;
+	}
+	
 }
