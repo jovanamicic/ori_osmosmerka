@@ -2,7 +2,10 @@ var startClick = 0; //not clicked
 var endClick = 0; //not clicked
 var foundWordsCount = 0;
 var wordsToFindCount = 0;
-
+var numberOfSelected = 0; //broj selektovanih divova, kako bi se omogucila zabrana selektovanja u pogresnom smeru
+var id1 = 0;
+var id2 = 0;
+var direc = "";
 category = "";
 
 
@@ -83,7 +86,6 @@ $(document).on('mousedown','.letters',function(){
 	if (startClick == 0){
 		var selectedLetter = $(this).text();
 		$('#showSelectedLetters').val(selectedLetter);
-		//$(this).css("background", "#555555");
 		
 		//TODO treba da se doda klasa
 		var is_founded = false;
@@ -119,11 +121,11 @@ $(document).on('mousedown','.letters',function(){
 				if (data == "ok") //ako je pogodio rec obelezi je kao pronadjenu
 				{
 					var selectedWord = selectedLetters.toLowerCase();
-					$("." + selectedWord).html("<strike  style='color:#555555'>" + selectedWord + "</strike>");
+					$("." + selectedWord).html("<strike  style='color:#555555' class='strikeClass'>" + selectedWord + "</strike>");
 					
 					$(".selected_word").addClass("founded_word");
 					$(".selected_word").removeClass("selected_word");
-					
+				//TODO	$(".selected_word").first().removeClass("icon-effect");  ********KACAAAAAAAA treba skloniti klasu icon-effect sa prvog slova
 					var snd = new Audio("sound//successSound.mp3");
 					snd.play();
 					
@@ -134,6 +136,7 @@ $(document).on('mousedown','.letters',function(){
 						var snd = new Audio("sound//gameOverSound.mp3");
 						snd.play();
 						setTimeout(function(){$('#playAgainModal').modal();}, 2000);
+						
 						
 					}
 				}
@@ -163,9 +166,11 @@ $(document).on('mouseover','.letters', function(){
 		var text = $('#showSelectedLetters').val();
 		var selectedLetter = $(this).text();
 		//$(this).css("background", "#555555");
-		$('#showSelectedLetters').val(text + selectedLetter);
+		
 		
 		var is_founded = false;
+		
+		
 		
 		if ($(this).hasClass('founded_word')) {
 			$(this).addClass("founded");
@@ -176,6 +181,11 @@ $(document).on('mouseover','.letters', function(){
 		
 		$(this).addClass("selected_word");
 	}
+});
+
+var previousDivID = "";
+$(document).on('mouseleave','.letters', function(){
+	previousDivID = $(this).attr('id');
 });
 
 
@@ -212,3 +222,32 @@ function startTimer() {
 	    clearTimeout(t);
 	}
 }
+
+//***SHINE*** Klikom na hint zasija prvo slovo reci koja nije pronadjena
+ $(document).on('click','#hintBtn',function(e){
+	 var notFoundWords = [];
+	 var hintWord = "";
+	 e.preventDefault();
+	 $("#allWords > div").each(function(){
+		    var context = $(this);
+		    if (!($(this).has('strike').length)) {
+		    	notFoundWords.push(context.text());
+		    }
+		});
+	 hintWord = notFoundWords[0];
+	 $.ajax({
+			type : 'POST',
+			url : "../ORI_osmosmerka_web/rest/game/findLetterForHint",
+			contentType : 'application/json',
+			data : JSON.stringify(hintWord),
+			dataType : "text", 				// data type of response
+			success : function(data) {
+				divId = "#"+data;
+				$(divId).addClass("icon-effect");
+			},
+			error:  function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX ERROR in all Objects Index js: " + errorThrown);
+			}
+		});
+	 
+ }) 

@@ -27,6 +27,7 @@ public class WordSearchServices {
 	ServletContext ctx;
 
 	private static ArrayList<String> wordsToFind;
+	private static ArrayList<Word> wordsInGrid;
 	public char fs = File.separatorChar;
 	
 	@POST
@@ -49,9 +50,13 @@ public class WordSearchServices {
 		WordSearchGenerator generator = new WordSearchGenerator(5000, allWords);
 		
 		generator.generate(); 		//ubaci reci
-		//generator.randomLetters(); 	//popuni grid do kraja random slovima
+		generator.randomLetters(); 	//popuni grid do kraja random slovima
 		
 		wordsToFind = new ArrayList<String>();
+		wordsInGrid = new ArrayList<Word>();
+		
+		wordsInGrid.addAll(generator.getAvailableWords());
+		
 		for (String s : generator.getCurrentWordList())
 			wordsToFind.add(s.toLowerCase());
 		
@@ -65,6 +70,8 @@ public class WordSearchServices {
 	public ArrayList<String> getWords() throws ClassNotFoundException, IOException {
 		return wordsToFind;
 	}
+	
+	
 	
 	@POST
 	@Path("/checkAnswer")
@@ -82,5 +89,24 @@ public class WordSearchServices {
 		
 		return "no";
 		
+	}
+	
+	@POST
+	@Path("/findLetterForHint")
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces(MediaType.TEXT_PLAIN)
+	public String findLetterForHint(String word) throws ClassNotFoundException, IOException {
+		word = word.replace("\"", "");
+		
+		for (Word w : wordsInGrid)
+		{
+			if (w.getWord().equalsIgnoreCase(word)){
+				int row = w.getLetters().get(0).getX();
+				int col = w.getLetters().get(0).getY();
+				int index = row * 12 + col;
+				return index+"";
+			}
+		}
+		return "error";
 	}
 }
