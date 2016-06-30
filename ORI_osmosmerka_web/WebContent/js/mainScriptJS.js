@@ -96,9 +96,6 @@ $(document).on('mousedown','.letters',function(){
 	if (startClick == 0){
 		var selectedLetter = $(this).text();
 		$('#showSelectedLetters').val(selectedLetter);
-		
-		firstLetterID = $(this).attr("id");
-		
 		//TODO treba da se doda klasa
 		var is_founded = false;
 		
@@ -373,6 +370,7 @@ var hintUsed = 0;
 			success : function(data) {
 				divId = "#"+data;
 				$(divId).addClass("icon-effect");
+				firstLetterID = data;
 			},
 			error:  function(XMLHttpRequest, textStatus, errorThrown) {
 				alert("AJAX ERROR in all Objects Index js: " + errorThrown);
