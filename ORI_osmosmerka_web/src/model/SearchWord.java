@@ -34,7 +34,7 @@ public class SearchWord {
 		
 		WordSearchGenerator generator = new WordSearchGenerator(5000, allWords);
 		
-		generator.generate();
+		generator.generate("Medium");
 		
 		generator.randomLetters();
 		generator.display();
