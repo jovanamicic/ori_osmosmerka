@@ -146,6 +146,7 @@ $(document).on('mousedown','.letters',function(){
 					$(".founded").addClass("founded_word");
 					var snd = new Audio("sound//errorSound.mp3");
 					snd.play();
+					$('#showSelectedLetters').val("");
 				}
 				
 			},
@@ -179,7 +180,113 @@ $(document).on('mouseover','.letters', function(){
 		$(this).removeClass("plain_word");
 		$(this).removeClass("founded_word");
 		
-		$(this).addClass("selected_word");
+		console.log("duzina " + $('.selected_word').length);
+		
+		if ($(this).hasClass("selected_word"))
+		{
+			$("#"+previousDivID).removeClass("selected_word");
+			$('#showSelectedLetters').val(text.substring(0, text.length-1));
+			if ($("#"+previousDivID).hasClass('founded')) {
+				$("#"+previousDivID).addClass("founded_word");
+			}
+		}
+		else if ($('.selected_word').length < 2)
+		{
+			console.log("usao u prvi else");
+			
+			$('#showSelectedLetters').val(text + selectedLetter);
+			$(this).addClass("selected_word");
+			
+			
+			numberOfSelected = $('.selected_word').length;
+			
+			//ukoliko je broj selektovanih divova veci ili jednak 2
+			//uoci patern i onemoguci selektovanje ostalih divova
+			if (numberOfSelected >= 2) {
+				id1 = document.getElementsByClassName('selected_word')[0].id;
+				id2 = document.getElementsByClassName('selected_word')[1].id;
+				
+				if (Number(id1) + 1 == Number(id2)){
+					direc = "horizontal";
+					console.log(direc);
+				}
+				else if (Number(id1) + 12 == Number(id2)){
+					direc = "vertical";
+					console.log(direc);
+				}
+				else if (Number(id1) + 12 - 1 == Number(id2)){
+					direc = "diagonal/ ";
+					console.log(direc);
+				}
+				else if (Number(id1) + 1 + 12 == Number(id2)){
+					direc = "diagonal\ ";
+					console.log(direc);
+				}
+			}
+		}
+		else {
+			if ($('.selected_word').length >= 2){
+				
+				if (direc == "horizontal"){
+					//ide ka desno, EAST
+					if (Number($(this).attr("id")) == Number(id2) + 1) {
+						$('#showSelectedLetters').val(text + selectedLetter);
+						$(this).addClass("selected_word");
+						id2 = Number($(this).attr("id"));
+					}
+					//ide ka levo, WEST
+					if (Number($(this).attr("id")) + 1 == Number(id1) ) {
+						$('#showSelectedLetters').val(text + selectedLetter);
+						$(this).addClass("selected_word");
+						id1 = Number($(this).attr("id"));
+					}
+				}
+				else if (direc == "vertical") {
+					//ide ka dole, SOUTH
+					if (Number($(this).attr("id")) == Number(id2) + 12) {
+						$('#showSelectedLetters').val(text + selectedLetter);
+						$(this).addClass("selected_word");
+						id2 = Number($(this).attr("id"));
+					}
+					//ide ka gore, NORTH
+					if (Number($(this).attr("id")) + 12 == Number(id1) ) {
+						$('#showSelectedLetters').val(text + selectedLetter);
+						$(this).addClass("selected_word");
+						id1 = Number($(this).attr("id"));
+					}
+				}
+				
+				else if (direc == "diagonal/ ") {
+					//ide ka gore desno, SOUTH-EAST
+					if (Number($(this).attr("id")) == Number(id2) + 12 - 1) {
+						$('#showSelectedLetters').val(text + selectedLetter);
+						$(this).addClass("selected_word");
+						id2 = Number($(this).attr("id"));
+					}
+					//ide ka gore, NORTH
+					if (Number($(this).attr("id")) + 12 - 1 == Number(id1) ) {
+						$('#showSelectedLetters').val(text + selectedLetter);
+						$(this).addClass("selected_word");
+						id1 = Number($(this).attr("id"));
+					}
+				}
+				
+				else if (direc == "diagonal\ ") {
+					//ide ka gore desno, SOUTH-EAST
+					if (Number($(this).attr("id")) == Number(id2) + 12 + 1) {
+						$('#showSelectedLetters').val(text + selectedLetter);
+						$(this).addClass("selected_word");
+						id2 = Number($(this).attr("id"));
+					}
+					//ide ka gore, NORTH
+					if (Number($(this).attr("id")) + 12 + 1 == Number(id1) ) {
+						$('#showSelectedLetters').val(text + selectedLetter);
+						$(this).addClass("selected_word");
+						id1 = Number($(this).attr("id"));
+					}
+				}
+			}
+		}
 	}
 });
 
@@ -187,7 +294,6 @@ var previousDivID = "";
 $(document).on('mouseleave','.letters', function(){
 	previousDivID = $(this).attr('id');
 });
-
 
 
 function startTimer() {
