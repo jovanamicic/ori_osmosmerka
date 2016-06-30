@@ -3,6 +3,7 @@ function chooseCategory(e){
 }
 
 category = "";
+difficult = "";
 
 
 $(document).on('click', '#chooseCategory li', function(){
@@ -10,6 +11,11 @@ $(document).on('click', '#chooseCategory li', function(){
 	$('#chooseCategoryBtn').html(category);
 });
 
+$(document).on('click', '#chooseDifficult li', function(){
+	difficult = $(this).text();
+	$('#chooseDifficultBtn').html(difficult);
+});
+
 function redirect(){
-	window.location.href = "template.html?category=" + category;
+	window.location.href = "template.html?category=" + category + "&difficult=" + difficult;
 }

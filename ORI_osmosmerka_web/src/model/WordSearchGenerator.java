@@ -22,6 +22,8 @@ public class WordSearchGenerator {
 	private ArrayList<Word> words;
 
 	private ArrayList<Field> grid;
+	
+	private static String difficult = "";
 
 	public WordSearchGenerator() {
 		
@@ -244,7 +246,8 @@ public class WordSearchGenerator {
 		ArrayList<String> coordList = new ArrayList<String>();
 		ArrayList<String> newCoordList = new ArrayList<String>();
 
-
+		System.out.println("TEZINA " + difficult);
+		
 		for (int i = 0; i < word.getWord().length(); i++) {
 
 			char letter = word.getWord().charAt(i);
@@ -267,7 +270,7 @@ public class WordSearchGenerator {
 						}
 						
 						// proba north, na gore
-						if (row + i < ROWS) //da ne izadjemo van mreze
+						if (row + i < ROWS && !difficult.equalsIgnoreCase("Easy")) //da ne izadjemo van mreze
 						{
 							if (row + i - word.getWord().length() > 0) { //da li moze da stane vertikalno
 								String coords = cell + "," + (row + i) + ",north,0";
@@ -283,7 +286,7 @@ public class WordSearchGenerator {
 							}
 						
 						// proba west, na levo
-						if (cell + i < COLUMS) {
+						if (cell + i < COLUMS && !difficult.equalsIgnoreCase("Easy")) {
 							if (cell + i - word.getWord().length() > 0) {
 								String coords = (cell + i) + "," + (row) + ",west,0";
 								coordList.add(coords); 
@@ -291,7 +294,7 @@ public class WordSearchGenerator {
 						}
 						
 						// proba north-east, gore desno
-						if (row + i < ROWS && cell - i >= 0) //da ne izadjemo van mreze
+						if (row + i < ROWS && cell - i >= 0 && !difficult.equalsIgnoreCase("Easy") && !difficult.equalsIgnoreCase("Medium")) //da ne izadjemo van mreze
 						{
 							if (row + i - word.getWord().length() > 0 
 								&&	cell - i + word.getWord().length() <= COLUMS ) { //da li moze da stane vertikalno
@@ -301,7 +304,7 @@ public class WordSearchGenerator {
 						}
 						
 						// proba north-west, na gore levo
-						if (row + i < ROWS && cell + i < COLUMS) //da ne izadjemo van mreze
+						if (row + i < ROWS && cell + i < COLUMS && !difficult.equalsIgnoreCase("Easy") && !difficult.equalsIgnoreCase("Medium")) //da ne izadjemo van mreze
 						{
 							if (row + i - word.getWord().length() > 0 && cell + i - word.getWord().length() > 0) { //da li moze da stane vertikalno
 								String coords = (cell + i) + "," + (row + i) + ",north-west,0";
@@ -310,7 +313,7 @@ public class WordSearchGenerator {
 						}
 						
 						//proba south-east, dole desno
-						if (row - i > 0 && cell - i > 0) //da ne izadjemo van mreze
+						if (row - i > 0 && cell - i > 0 && !difficult.equalsIgnoreCase("Easy") && !difficult.equalsIgnoreCase("Medium")) //da ne izadjemo van mreze
 						{
 							if (row - i + word.getWord().length() < ROWS && cell - i + word.getWord().length() < COLUMS) { //da li moze da stane vertikalno
 								String coords = (cell - i) + "," + (row - i) + ",south-east,0";
@@ -319,7 +322,7 @@ public class WordSearchGenerator {
 						}
 						
 						//proba south-west, dole levo
-						if (row - i > 0 && cell + i < COLUMS) //da ne izadjemo van mreze
+						if (row - i > 0 && cell + i < COLUMS && !difficult.equalsIgnoreCase("Easy") && !difficult.equalsIgnoreCase("Medium")) //da ne izadjemo van mreze
 						{
 							if (row - i + word.getWord().length() < ROWS && cell + i - word.getWord().length() > 0) { //da li moze da stane vertikalno
 								String coords = (cell + i) + "," + (row - i) + ",south-west,0";
@@ -720,8 +723,11 @@ public class WordSearchGenerator {
 		grid.set(index, field);
 	}
 
-	public void generate() throws ClassNotFoundException, IOException {
+	public void generate(String difficultStr) throws ClassNotFoundException, IOException {
 
+		System.out.println("TEZINA GEN " + difficultStr);
+		difficult = difficultStr;
+		
 		WordSearchGenerator copy = new WordSearchGenerator();
 		copy.setAvailableWords(this.getAvailableWords());
 		copy.setCurrentWordList(this.getCurrentWordList());

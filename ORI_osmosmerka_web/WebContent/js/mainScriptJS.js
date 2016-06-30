@@ -7,15 +7,20 @@ var id1 = 0;
 var id2 = 0;
 var direc = "";
 category = "";
-
+difficult = "";
 
 $(document).on('click', '#chooseCategory li', function(){
 	category = $(this).text();
 	$('#chooseCategoryBtn').html(category);
 });
 
+$(document).on('click', '#chooseDifficult li', function(){
+	difficult = $(this).text();
+	$('#chooseDifficultBtn').html(difficult);
+});
+
 function redirect(){
-	window.location.href = "template.html?category=" + category;
+	window.location.href = "template.html?category=" + category + "&difficult=" + difficult;
 }
 
 
@@ -28,12 +33,16 @@ function random()
 {
 
 	var category = getURLParameter(window.location, 'category');
+	var difficult = getURLParameter(window.location, 'difficult');
 	
 	$.ajax({
 		type : 'POST',
 		url : "../ORI_osmosmerka_web/rest/game/getGameTable",
 		contentType : 'application/json',
-		data : JSON.stringify(category),
+		data : JSON.stringify({
+			"category" : category,
+			"difficult" : difficult
+		}),
 		dataType : "json", 				// data type of response
 		success : function(data) {
 			
@@ -82,10 +91,13 @@ function wordsToFind() {
 	
 }
 
+var firstLetterID = -1;
 $(document).on('mousedown','.letters',function(){
 	if (startClick == 0){
 		var selectedLetter = $(this).text();
 		$('#showSelectedLetters').val(selectedLetter);
+		
+		firstLetterID = $(this).attr("id");
 		
 		//TODO treba da se doda klasa
 		var is_founded = false;
@@ -98,9 +110,6 @@ $(document).on('mousedown','.letters',function(){
 		$(this).removeClass("founded_word");
 		
 		$(this).addClass("selected_word");
-		
-		
-		
 		
 		startClick = 1; // clicked
 		endClick = 0;
@@ -121,11 +130,12 @@ $(document).on('mousedown','.letters',function(){
 				if (data == "ok") //ako je pogodio rec obelezi je kao pronadjenu
 				{
 					var selectedWord = selectedLetters.toLowerCase();
-					$("." + selectedWord).html("<strike  style='color:#555555'>" + selectedWord + "</strike>");
+					$("." + selectedWord).html("<strike  style='color:#555555' class='strikeClass'>" + selectedWord + "</strike>");
 					
 					$(".selected_word").addClass("founded_word");
+					var divId = "#"+ firstLetterID;
 					$(".selected_word").removeClass("selected_word");
-					
+					$(divId).removeClass("icon-effect");
 					var snd = new Audio("sound//successSound.mp3");
 					snd.play();
 					
@@ -136,6 +146,7 @@ $(document).on('mousedown','.letters',function(){
 						var snd = new Audio("sound//gameOverSound.mp3");
 						snd.play();
 						setTimeout(function(){$('#playAgainModal').modal();}, 2000);
+						
 						
 					}
 				}
@@ -328,3 +339,32 @@ function startTimer() {
 	    clearTimeout(t);
 	}
 }
+
+//***SHINE*** Klikom na hint zasija prvo slovo reci koja nije pronadjena
+ $(document).on('click','#hintBtn',function(e){
+	 var notFoundWords = [];
+	 var hintWord = "";
+	 e.preventDefault();
+	 $("#allWords > div").each(function(){
+		    var context = $(this);
+		    if (!($(this).has('strike').length)) {
+		    	notFoundWords.push(context.text());
+		    }
+		});
+	 hintWord = notFoundWords[0];
+	 $.ajax({
+			type : 'POST',
+			url : "../ORI_osmosmerka_web/rest/game/findLetterForHint",
+			contentType : 'application/json',
+			data : JSON.stringify(hintWord),
+			dataType : "text", 				// data type of response
+			success : function(data) {
+				divId = "#"+data;
+				$(divId).addClass("icon-effect");
+			},
+			error:  function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX ERROR in all Objects Index js: " + errorThrown);
+			}
+		});
+	 
+ }) 
