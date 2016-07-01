@@ -383,3 +383,25 @@ var hintUsed = 0;
 		});
 	 
  }) 
+ 
+  //SOLVE Btn
+ $(document).on('click','#solveBtn',function(e){
+	 $.ajax({
+			type : 'GET',
+			url : "../ORI_osmosmerka_web/rest/game/solve" ,
+			dataType : "json", 				
+			success : function(data) {
+				var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+				$.each(list, function(index, letter){
+					var divID = "#" + letter;
+					$(divID).removeClass("plain_word");
+					$(divID).addClass("founded_word");
+				});
+			},
+			error:  function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("AJAX ERROR in all Objects Index js: " + errorThrown);
+			}
+		});
+	 
+	 
+ })

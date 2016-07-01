@@ -69,4 +69,10 @@ public class Word {
 		letters.add(field); 
 	}
 
+	@Override
+	public String toString() {
+		return "Word [number=" + number + ", word=" + word + ", direction=" + direction + ", letters=" + letters + "]";
+	}
+
+	
 }

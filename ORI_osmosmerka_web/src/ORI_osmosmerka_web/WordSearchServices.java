@@ -15,6 +15,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import model.Field;
 import model.Word;
 import model.WordSearchGenerator;
@@ -149,4 +151,22 @@ public class WordSearchServices {
 		return r.nextInt((max - min) + 1) + min;
 	}
 	
+	@GET
+	@Path("/solve")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<String> solve() throws ClassNotFoundException, IOException {
+		ArrayList<String> retVal = new ArrayList<String>();
+		for (Word w : wordsInGrid)
+		{
+			if(wordsToFind.contains(w.getWord().toLowerCase())) {  
+				for (Field letter : w.getLetters()){
+					int row =letter.getX();
+					int col = letter.getY();
+					int index = row * 12 + col;
+					retVal.add(index+"");
+				}
+			}
+		}
+		return retVal;
+	}
 }
