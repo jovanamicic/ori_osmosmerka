@@ -130,7 +130,7 @@ public class WordSearchServices {
 		for (Word w : wordsInGrid)
 		{
 			if (w.getWord().equalsIgnoreCase(word)){
-				int n = getRandomNumberInRange(0, w.getLetters().size());
+				int n = getRandomNumberInRange(0, w.getLetters().size()-1);
 				int row = w.getLetters().get(n).getX();
 				int col = w.getLetters().get(n).getY();
 				int index = row * 12 + col;
