@@ -28,9 +28,21 @@ function getURLParameter(url, name) {
     return (RegExp(name + '=' + '(.+?)(&|$)').exec(url)||[,null])[1];
 }
 
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+    function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
+  }
+
 
 function random()
 {
+	category = getUrlVars()["category"];
+	difficult = getUrlVars()["difficult"];
+	
 	//defaultna kategorija
 	if (category == ""){
 		category = "Computer";
@@ -397,6 +409,31 @@ var hintUsed = 0;
 					$(divID).removeClass("plain_word");
 					$(divID).addClass("founded_word");
 				});
+				
+				//precrtaj pronadjene reci
+				$.ajax({
+					type : 'GET',
+					url : "../ORI_osmosmerka_web/rest/game/solvedWords" ,
+					dataType : "json", 				
+					success : function(data) {
+						var list = data == null ? [] : (data instanceof Array ? data : [ data ]);
+						$.each(list, function(index, word){
+							$("." + word).html("<strike  style='color:#555555' class='strikeClass'>" + word + "</strike>");
+						});
+					},
+					error:  function(XMLHttpRequest, textStatus, errorThrown) {
+						alert("AJAX ERROR in all Objects Index js: " + errorThrown);
+					}
+				});
+				
+				foundWordsCount = 12;
+				if  (wordsToFindCount == foundWordsCount){
+					toastr.success("Congrats! You win!");  //TODO mozemo dodati neki lepsi ispis...
+					$("#stop").click();
+					var snd = new Audio("sound//gameOverSound.mp3");
+					snd.play();
+					setTimeout(function(){$('#playAgainModal').modal();}, 2000);
+				}
 			},
 			error:  function(XMLHttpRequest, textStatus, errorThrown) {
 				alert("AJAX ERROR in all Objects Index js: " + errorThrown);

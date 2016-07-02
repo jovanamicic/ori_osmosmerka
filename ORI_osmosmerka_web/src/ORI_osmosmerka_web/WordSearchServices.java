@@ -46,7 +46,6 @@ public class WordSearchServices {
 		String category = (input.split(",")[0]).split(":")[1];
 		String difficult = (input.split(",")[1]).split(":")[1];
 		
-		
 		String path = ctx.getRealPath("")+ fs + "dataset" + fs + category.toLowerCase()+".csv";
 		ArrayList<String> availableWords = DatasetParser.parseDataSet(path);
 		ArrayList<Word> allWords = new ArrayList<Word>();
@@ -158,13 +157,29 @@ public class WordSearchServices {
 		ArrayList<String> retVal = new ArrayList<String>();
 		for (Word w : wordsInGrid)
 		{
-			if(wordsToFind.contains(w.getWord().toLowerCase())) {  
-				for (Field letter : w.getLetters()){
-					int row =letter.getX();
-					int col = letter.getY();
-					int index = row * 12 + col;
-					retVal.add(index+"");
+			if(wordsToFind.contains(w.getWord().toLowerCase())) {
+				if (w != null && w.getLetters() != null) {
+					for (Field letter : w.getLetters()){
+						int row =letter.getX();
+						int col = letter.getY();
+						int index = row * 12 + col;
+						retVal.add(index+"");
+					}
 				}
+			}
+		}
+		return retVal;
+	}
+	
+	@GET
+	@Path("/solvedWords")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<String> solvedWords() throws ClassNotFoundException, IOException {
+		ArrayList<String> retVal = new ArrayList<String>();
+		for (Word w : wordsInGrid)
+		{
+			if(wordsToFind.contains(w.getWord().toLowerCase())) {  
+				retVal.add(w.getWord().toLowerCase());
 			}
 		}
 		return retVal;
